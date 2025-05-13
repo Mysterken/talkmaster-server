@@ -35,3 +35,7 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_PHP_PHPSTAN: false
+          VALIDATE_PHP_COMPOSER: true
+          VALIDATE_ALL_CODEBASE: true
+          DEFAULT_BRANCH: main
