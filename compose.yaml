@@ -45,7 +45,7 @@ services:
       # You should definitely change the password in production
       POSTGRES_PASSWORD : ${POSTGRES_PASSWORD:-!ChangeMe!}
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "talks_database", "-U", "${POSTGRES_USER:-app}"]
+      test: ["CMD", "pg_isready", "-d", "talks_database", "-U", "${POSTGRES_USER:-postgres}"]
       timeout: 5s
       retries: 5
       start_period: 60s
