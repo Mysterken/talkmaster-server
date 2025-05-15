@@ -33,7 +33,7 @@ final class HomeController extends AbstractController
             $newUser,
             $password
         );
-        $newUser->setToken($token);
+        $newUser->setPassword($token);
         $newUser->setRoles([$_REQUEST['role']]);
         $entityManager->persist($newUser);
         $entityManager->flush();
