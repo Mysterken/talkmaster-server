@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UsersTalkRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UsersTalkRepository::class)]
-class UsersTalk
+#[ApiResource]
+class UsersTalk implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -21,7 +25,7 @@ class UsersTalk
     #[ORM\Column(length: 32)]
     private ?string $lastName = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 100)]
@@ -82,12 +86,12 @@ class UsersTalk
         return $this;
     }
 
-    public function getToken(): ?string
+    public function getPassword(): ?string
     {
         return $this->token;
     }
 
-    public function setToken(string $token): static
+    public function setPassword(string $token): static
     {
         $this->token = $token;
 
@@ -96,7 +100,11 @@ class UsersTalk
 
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): static
@@ -105,6 +113,16 @@ class UsersTalk
 
         return $this;
     }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function eraseCredentials(): void
+    {
+    }
+
 
     /**
      * @return Collection<int, Talks>
